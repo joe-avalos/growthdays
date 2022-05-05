@@ -5,7 +5,12 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css'
 
 function App() {
-  const [form, setForm] = useState({})
+  const [form, setForm] = useState({
+    name: '',
+    age: '',
+    breed: '',
+    image: `https://placekitten.com/g/${Math.floor(Math.random() * (400 - 200 + 1) + 200)}/300`,
+  })
   const [errors, setErrors] = useState({})
   const [validated, setValidated] = useState(false)
   const [cats, setCats] = useState([])
@@ -49,12 +54,8 @@ function App() {
     const newErrors = formErrors()
     if (target.checkValidity() === false || Object.keys(newErrors).length > 0) {
       setErrors(newErrors)
+      setValidated(true)
     } else {
-      const image = `https://placekitten.com/g/${Math.floor(Math.random() * (400 - 200 + 1) + 200)}/300`
-      console.log(image)
-      setForm({
-        ...form, image
-      })
       setLoading(true)
       fetch(`${API_URL}/cat`,{
         method: 'POST',
@@ -68,10 +69,15 @@ function App() {
         .then(data => {
           setCats(data)
           setLoading(false)
+          setForm({
+            name: '',
+            age: '',
+            breed: '',
+            image: `https://placekitten.com/g/${Math.floor(Math.random() * (400 - 200 + 1) + 200)}/300`,
+          })
+          setValidated(false)
         })
     }
-    
-    setValidated(true)
   }
   return (
     <div className="App">
@@ -89,6 +95,7 @@ function App() {
                       type="text"
                       placeholder="Cat name"
                       required
+                      value={form.name}
                       onChange={(e) => setField('name', e.target.value)}/>
                     <Form.Control.Feedback
                       type="invalid">
@@ -107,6 +114,7 @@ function App() {
                       type="text"
                       placeholder="Cat age"
                       required
+                      value={form.age}
                       onChange={(e) => setField('age', e.target.value)}
                       isInvalid={!!errors.age}
                     />
@@ -127,6 +135,7 @@ function App() {
                       type="text"
                       placeholder="Cat breed"
                       required
+                      value={form.breed}
                       onChange={(e) => setField('breed', e.target.value)}/>
                     <Form.Control.Feedback
                       type="invalid">
