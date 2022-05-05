@@ -10,10 +10,11 @@ function App() {
   const [validated, setValidated] = useState(false)
   const [cats, setCats] = useState([])
   const [loading, setLoading] = useState(true)
+  const API_URL = 'http://Growt-MyFar-1IX6ZL9TE31ZA-719560253.us-east-1.elb.amazonaws.com'
   
   useEffect( () => {
     setLoading(true)
-      fetch('http://localhost:8080/cat')
+      fetch(`${API_URL}/cat`)
         .then(response => response.json())
         .then(data => {
           setCats(data)
@@ -55,7 +56,7 @@ function App() {
         ...form, image
       })
       setLoading(true)
-      fetch('http://localhost:8080/cat',{
+      fetch(`${API_URL}/cat`,{
         method: 'POST',
         headers: {
           'Accept': 'application/json',
